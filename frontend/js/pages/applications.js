@@ -1,6 +1,8 @@
 import { client, APP_STATE } from '../config.js';
 import { PDFGenerator } from '../utils/pdf-generator.js';
 
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "https://trombini-carreiras.onrender.com").replace(/\/+$/, "");
+
 function getItems(response) {
     if (Array.isArray(response?.data?.data?.items)) return response.data.data.items;
     if (Array.isArray(response?.data?.items)) return response.data.items;
@@ -82,7 +84,7 @@ export async function renderApplications() {
             for (const app of applications) {
                 if (!resumes[app.resume_id]) {
                     try {
-                        const resumeResponse = await requestApi(`/api/v1/resumes/${app.resume_id}`);
+                        const resumeResponse = await requestApi(`${API_BASE_URL}/api/v1/resumes/${app.resume_id}`);
                         resumes[app.resume_id] = resumeResponse?.data || null;
                     } catch (error) {
                         console.error(`Error loading resume ${app.resume_id}:`, error);
@@ -196,7 +198,7 @@ export async function renderApplications() {
     
     window.updateApplicationStatus = async (appId, newStatus) => {
         try {
-            await requestApi(`/api/v1/applications/${appId}/status`, {
+            await requestApi(`${API_BASE_URL}/api/v1/applications/${appId}/status`, {
                 method: 'PATCH',
                 body: { status: newStatus }
             });

@@ -2,6 +2,8 @@ import { APP_STATE } from '../config.js';
 import { AuthService } from '../auth.js';
 import { Router } from '../router.js';
 
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "https://trombini-carreiras.onrender.com").replace(/\/+$/, "");
+
 function getAuthHeaders() {
     const token = localStorage.getItem('token');
     return token ? { Authorization: `Bearer ${token}` } : {};
@@ -14,7 +16,7 @@ async function fetchEntityList(entity, { query = {}, limit = 10, sort = '-create
         sort
     });
 
-    const response = await fetch(`/api/v1/entities/${entity}?${params.toString()}`, {
+    const response = await fetch(`${API_BASE_URL}/api/v1/entities/${entity}?${params.toString()}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -1,7 +1,8 @@
 import { APP_STATE, refreshApiClient } from "./config.js";
 import { Router } from "./router.js";
 
-const AUTH_BASE = "/api/v1/auth";
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "https://trombini-carreiras.onrender.com").replace(/\/+$/, "");
+const AUTH_BASE = `${API_BASE_URL}/api/v1/auth`;
 
 function getStoredToken() {
   return localStorage.getItem("token");
@@ -217,7 +218,7 @@ export class AuthService {
   }
 
   static async createUserProfile(userData) {
-    const response = await fetch("/api/v1/profiles", {
+    const response = await fetch(`${API_BASE_URL}/api/v1/profiles`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

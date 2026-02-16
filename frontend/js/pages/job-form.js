@@ -1,13 +1,15 @@
 import { APP_STATE } from '../config.js';
 import { Router } from '../router.js';
 
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "https://trombini-carreiras.onrender.com").replace(/\/+$/, "");
+
 function getAuthHeaders() {
     const token = localStorage.getItem('token');
     return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
 async function fetchEntityById(entity, id) {
-    const response = await fetch(`/api/v1/entities/${entity}/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/v1/entities/${entity}/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -24,7 +26,7 @@ async function fetchEntityById(entity, id) {
 }
 
 async function createEntity(entity, payload) {
-    const response = await fetch(`/api/v1/entities/${entity}`, {
+    const response = await fetch(`${API_BASE_URL}/api/v1/entities/${entity}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -42,7 +44,7 @@ async function createEntity(entity, payload) {
 }
 
 async function updateEntity(entity, id, payload) {
-    const response = await fetch(`/api/v1/entities/${entity}/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/v1/entities/${entity}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

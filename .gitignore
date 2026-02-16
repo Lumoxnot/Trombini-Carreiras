@@ -1,6 +1,9 @@
 node_modules
 node_modules/
 .env
+frontend/.env
+frontend/.env.development
+frontend/.env.production
 backend/.env
 dist/
 frontend/dist/
