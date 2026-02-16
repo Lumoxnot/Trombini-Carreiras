@@ -1,11 +1,11 @@
 ﻿{
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://trombini-carreiras.onrender.com/api/$1"
+      "source": "/api/:path*",
+      "destination": "https://trombini-carreiras.onrender.com/api/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]
