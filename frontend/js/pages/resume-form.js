@@ -8,17 +8,32 @@ function getItems(response) {
     return [];
 }
 
+function getErrorMessage(error) {
+    return (
+        error?.response?.data?.error ||
+        error?.response?.data?.message ||
+        error?.message ||
+        'Erro inesperado'
+    );
+}
+
+async function fetchLatestResume() {
+    const response = await client.entities.resumes.query({
+        query: {},
+        limit: 50,
+        sort: '-updated_at'
+    });
+    const resumeItems = getItems(response);
+    return resumeItems.length > 0 ? resumeItems[0] : null;
+}
+
 export async function renderResumeForm() {
     const app = document.getElementById('app');
     
     // Verificar se já existe currículo
     let existingResume = null;
     try {
-        const response = await client.entities.resumes.query({ query: {}, limit: 1 });
-        const resumeItems = getItems(response);
-        if (resumeItems.length > 0) {
-            existingResume = resumeItems[0];
-        }
+        existingResume = await fetchLatestResume();
     } catch (error) {
         console.error('Error loading resume:', error);
     }
@@ -135,23 +150,41 @@ export async function renderResumeForm() {
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Salvando...';
+
+            // Revalida antes de salvar para evitar criar currículo duplicado.
+            const latestResume = await fetchLatestResume();
+            const resumeToUpdate = latestResume || existingResume;
             
-            if (existingResume) {
+            if (resumeToUpdate) {
                 await client.entities.resumes.update({
-                    id: existingResume.id,
+                    id: resumeToUpdate.id,
                     data: resumeData
                 });
             } else {
                 resumeData.user_id = APP_STATE.currentUser.id;
-                resumeData.created_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
-                await client.entities.resumes.create({ data: resumeData });
+                resumeData.created_at = new Date().toISOString();
+
+                try {
+                    await client.entities.resumes.create({ data: resumeData });
+                } catch (createError) {
+                    // Fallback para produção: alguns ambientes retornam 500 no insert quando já existe registro.
+                    const existingAfterCreateFailure = await fetchLatestResume();
+                    if (!existingAfterCreateFailure?.id) {
+                        throw createError;
+                    }
+
+                    await client.entities.resumes.update({
+                        id: existingAfterCreateFailure.id,
+                        data: resumeData
+                    });
+                }
             }
             
             alert('Currículo salvo com sucesso!');
             Router.navigateTo('/candidate-dashboard');
         } catch (error) {
             console.error('Error saving resume:', error);
-            alert('Erro ao salvar currículo. Por favor, tente novamente.');
+            alert(`Erro ao salvar currículo. ${getErrorMessage(error)}`);
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.disabled = false;
             submitBtn.textContent = 'Salvar Currículo';

@@ -18,7 +18,7 @@ export async function renderCandidateDashboard() {
     let notifications = [];
     
     try {
-        const resumeResponse = await client.entities.resumes.query({ query: {}, limit: 1 });
+        const resumeResponse = await client.entities.resumes.query({ query: {}, limit: 1, sort: '-updated_at' });
         const resumeItems = getItems(resumeResponse);
         if (resumeItems.length > 0) {
             resume = resumeItems[0];

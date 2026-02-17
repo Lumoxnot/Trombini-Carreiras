@@ -198,6 +198,37 @@ router.post("/:entity", async (req, res) => {
       dataToInsert.user_id = req.user.id;
     }
 
+    if (entity === "resumes") {
+      const { data: existingResume, error: existingError } = await supabase
+        .from(table)
+        .select("id")
+        .eq("user_id", req.user.id)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (existingError) throw existingError;
+
+      if (existingResume?.id) {
+        const dataToUpdate = {
+          ...payload,
+          user_id: req.user.id,
+          updated_at: new Date().toISOString(),
+        };
+
+        const { data, error } = await supabase
+          .from(table)
+          .update(dataToUpdate)
+          .eq("id", existingResume.id)
+          .eq("user_id", req.user.id)
+          .select()
+          .single();
+
+        if (error) throw error;
+        return res.json({ data });
+      }
+    }
+
     const { data, error } = await supabase
       .from(table)
       .insert(dataToInsert)

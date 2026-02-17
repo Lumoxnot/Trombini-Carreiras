@@ -24,7 +24,7 @@ export async function renderJobsList() {
         jobs = getItems(response);
         
         // Buscar currículo do usuário
-        const resumeResponse = await client.entities.resumes.query({ query: {}, limit: 1 });
+        const resumeResponse = await client.entities.resumes.query({ query: {}, limit: 1, sort: '-updated_at' });
         const resumeItems = getItems(resumeResponse);
         if (resumeItems.length > 0) {
             userResume = resumeItems[0];
