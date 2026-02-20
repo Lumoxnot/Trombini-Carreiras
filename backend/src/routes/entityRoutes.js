@@ -203,7 +203,6 @@ router.post("/:entity", async (req, res) => {
         .from(table)
         .select("id")
         .eq("user_id", req.user.id)
-        .order("updated_at", { ascending: false })
         .limit(1)
         .maybeSingle();
 
@@ -213,7 +212,6 @@ router.post("/:entity", async (req, res) => {
         const dataToUpdate = {
           ...payload,
           user_id: req.user.id,
-          updated_at: new Date().toISOString(),
         };
 
         const { data, error } = await supabase
@@ -239,7 +237,9 @@ router.post("/:entity", async (req, res) => {
     return res.status(201).json({ data });
   } catch (error) {
     console.error("Erro ao criar entidade:", error);
-    return res.status(500).json({ error: "Erro ao criar entidade" });
+    return res.status(500).json({
+      error: error?.message || "Erro ao criar entidade",
+    });
   }
 });
 

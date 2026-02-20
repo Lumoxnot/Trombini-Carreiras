@@ -18,13 +18,23 @@ function getErrorMessage(error) {
 }
 
 async function fetchLatestResume() {
-    const response = await client.entities.resumes.query({
-        query: {},
-        limit: 50,
-        sort: '-updated_at'
-    });
-    const resumeItems = getItems(response);
-    return resumeItems.length > 0 ? resumeItems[0] : null;
+    try {
+        const response = await client.entities.resumes.query({
+            query: {},
+            limit: 50,
+            sort: '-updated_at'
+        });
+        const resumeItems = getItems(response);
+        return resumeItems.length > 0 ? resumeItems[0] : null;
+    } catch (error) {
+        // Fallback para ambientes sem a coluna updated_at.
+        const response = await client.entities.resumes.query({
+            query: {},
+            limit: 50
+        });
+        const resumeItems = getItems(response);
+        return resumeItems.length > 0 ? resumeItems[0] : null;
+    }
 }
 
 export async function renderResumeForm() {
@@ -142,8 +152,7 @@ export async function renderResumeForm() {
             skills: formData.get('skills'),
             contact_email: formData.get('contact_email'),
             contact_phone: formData.get('contact_phone'),
-            is_published: formData.get('is_published') === 'on',
-            updated_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
+            is_published: formData.get('is_published') === 'on'
         };
         
         try {
@@ -161,9 +170,6 @@ export async function renderResumeForm() {
                     data: resumeData
                 });
             } else {
-                resumeData.user_id = APP_STATE.currentUser.id;
-                resumeData.created_at = new Date().toISOString();
-
                 try {
                     await client.entities.resumes.create({ data: resumeData });
                 } catch (createError) {
