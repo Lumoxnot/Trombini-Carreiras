@@ -227,7 +227,7 @@ export async function renderApplications() {
             
             <div class="resume-details">
                 <h3>Resumo/Objetivo</h3>
-                <p>${resume.objective || 'Nao informado'}</p>
+                <p>${resume.objective || resume.summary || 'Nao informado'}</p>
                 <h3>Formação Acadêmica</h3>
                 <p>${resume.education}</p>
                 

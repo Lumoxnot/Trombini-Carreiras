@@ -49,6 +49,74 @@ function applySort(query, sortParam) {
   return query.order(column, { ascending: !descending });
 }
 
+function extractMissingColumn(error) {
+  const message = String(error?.message || "");
+  const match = message.match(/Could not find the '([^']+)' column/i);
+  return match?.[1] || null;
+}
+
+async function insertWithSchemaFallback(table, payload, options = {}) {
+  const entity = options.entity || "";
+  const dataToInsert = { ...payload };
+  let lastError = null;
+
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const { data, error } = await supabase
+      .from(table)
+      .insert(dataToInsert)
+      .select()
+      .single();
+
+    if (!error) return { data, error: null };
+
+    lastError = error;
+    const missingColumn = extractMissingColumn(error);
+    if (!missingColumn || !(missingColumn in dataToInsert)) break;
+
+    // Compatibilidade com bases legadas: objective -> summary.
+    if (
+      entity === "resumes" &&
+      missingColumn === "objective" &&
+      dataToInsert.objective &&
+      !dataToInsert.summary
+    ) {
+      dataToInsert.summary = dataToInsert.objective;
+    }
+
+    delete dataToInsert[missingColumn];
+  }
+
+  return { data: null, error: lastError };
+}
+
+async function updateWithSchemaFallback(table, baseQuery, payload, options = {}) {
+  const entity = options.entity || "";
+  const dataToUpdate = { ...payload };
+  let lastError = null;
+
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const { data, error } = await baseQuery(dataToUpdate);
+    if (!error) return { data, error: null };
+
+    lastError = error;
+    const missingColumn = extractMissingColumn(error);
+    if (!missingColumn || !(missingColumn in dataToUpdate)) break;
+
+    if (
+      entity === "resumes" &&
+      missingColumn === "objective" &&
+      dataToUpdate.objective &&
+      !dataToUpdate.summary
+    ) {
+      dataToUpdate.summary = dataToUpdate.objective;
+    }
+
+    delete dataToUpdate[missingColumn];
+  }
+
+  return { data: null, error: lastError };
+}
+
 function withOwnershipFilter(query, entity, userId) {
   if (entity === "user_profiles") return query.eq("user_id", userId);
   if (entity === "resumes") return query.eq("user_id", userId);
@@ -214,24 +282,28 @@ router.post("/:entity", async (req, res) => {
           user_id: req.user.id,
         };
 
-        const { data, error } = await supabase
-          .from(table)
-          .update(dataToUpdate)
-          .eq("id", existingResume.id)
-          .eq("user_id", req.user.id)
-          .select()
-          .single();
+        const { data, error } = await updateWithSchemaFallback(
+          table,
+          (safeData) =>
+            supabase
+              .from(table)
+              .update(safeData)
+              .eq("id", existingResume.id)
+              .eq("user_id", req.user.id)
+              .select()
+              .single(),
+          dataToUpdate,
+          { entity }
+        );
 
         if (error) throw error;
         return res.json({ data });
       }
     }
 
-    const { data, error } = await supabase
-      .from(table)
-      .insert(dataToInsert)
-      .select()
-      .single();
+    const { data, error } = await insertWithSchemaFallback(table, dataToInsert, {
+      entity,
+    });
 
     if (error) throw error;
     return res.status(201).json({ data });
@@ -251,10 +323,17 @@ router.put("/:entity/:id", async (req, res) => {
       return res.status(404).json({ error: "Entidade nao suportada" });
     }
 
-    let query = supabase.from(table).update(req.body || {}).eq("id", id);
-    query = withOwnershipFilter(query, entity, req.user.id);
-
-    const { data, error } = await query.select().single();
+    const payload = req.body || {};
+    const { data, error } = await updateWithSchemaFallback(
+      table,
+      (safeData) => {
+        let query = supabase.from(table).update(safeData).eq("id", id);
+        query = withOwnershipFilter(query, entity, req.user.id);
+        return query.select().single();
+      },
+      payload,
+      { entity }
+    );
     if (error) throw error;
 
     return res.json({ data });

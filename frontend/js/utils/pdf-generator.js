@@ -18,7 +18,7 @@ export class PDFGenerator {
         const age = safe(resume?.age);
         const email = safe(resume?.contact_email) || 'Nao informado';
         const phone = safe(resume?.contact_phone) || 'Nao informado';
-        const objective = safe(resume?.objective);
+        const objective = safe(resume?.objective || resume?.summary);
         const education = safe(resume?.education) || 'Nao informado';
         const experience = safe(resume?.experience) || 'Nao informado';
         const skills = safe(resume?.skills)

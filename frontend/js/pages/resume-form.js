@@ -85,7 +85,7 @@ export async function renderResumeForm() {
                             <div class="form-group">
                                 <label for="objective">Resumo/Objetivo *</label>
                                 <textarea id="objective" name="objective" rows="3" required
-                                    placeholder="Ex: Profissional com foco em desenvolvimento web, buscando atuar em projetos escalaveis e de alto impacto.">${existingResume?.objective || ''}</textarea>
+                                    placeholder="Ex: Profissional com foco em desenvolvimento web, buscando atuar em projetos escalaveis e de alto impacto.">${existingResume?.objective || existingResume?.summary || ''}</textarea>
                             </div>
                             
                             <div class="form-group">
