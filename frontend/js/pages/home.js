@@ -41,7 +41,7 @@ export async function renderHomePage() {
                         </div>
                     </div>
                     <div class="hero-image">
-                        <img src="https://mgx-backend-cdn.metadl.com/generate/images/954639/2026-02-05/6864bf38-a7b0-41f9-a19e-3108f3191854.png" alt="Profissionais trabalhando">
+                        <img src="/img/MTEmprega.jpeg" alt="Profissionais trabalhando">
                     </div>
                 </div>
             </section>
@@ -51,17 +51,17 @@ export async function renderHomePage() {
                     <h2 class="section-title">Como Funciona</h2>
                     <div class="features-grid">
                         <div class="feature-card">
-                            <img src="https://mgx-backend-cdn.metadl.com/generate/images/954639/2026-02-05/56264596-0164-463d-b0e7-9e27352691e3.png" alt="Dashboard do Candidato">
+                            <img src="/img/MT(1).jpeg" alt="Dashboard do Candidato">
                             <h3>Para Candidatos</h3>
                             <p>Crie seu curriculo profissional, candidate-se a vagas e receba notificacoes de oportunidades compativeis com seu perfil</p>
                         </div>
                         <div class="feature-card">
-                            <img src="https://mgx-backend-cdn.metadl.com/generate/images/954639/2026-02-05/edd93f13-c77c-4cb1-af84-d9a7f41d655d.png" alt="Recrutamento">
+                            <img src="/img/MT(2).jpeg" alt="Recrutamento">
                             <h3>Para Empresas</h3>
                             <p>Publique vagas, acesse curriculos qualificados e gerencie todo o processo de recrutamento em um so lugar</p>
                         </div>
                         <div class="feature-card">
-                            <img src="https://mgx-backend-cdn.metadl.com/generate/images/954639/2026-02-05/74bc4429-72a0-47d7-921f-78f92ad655c5.png" alt="Entrevista">
+                            <img src="/img/MT(1).jpeg" alt="Entrevista">
                             <h3>Conexao Direta</h3>
                             <p>Facilite o contato entre candidatos e empresas com integracao de WhatsApp e e-mail</p>
                         </div>
