@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import routes from "./src/routes/index.js";
-
+import rotaCnpj from "./src/routes/cnpjRoutes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, ".env") });
@@ -80,7 +80,7 @@ app.use((req, res, next) => {
 
 // Rotas da API
 app.use("/api/v1", routes);
-
+app.use("/api/v1/cnpj", rotaCnpj);
 // Rota raiz
 app.get("/", (req, res) => {
   res.json({
@@ -94,6 +94,7 @@ app.get("/", (req, res) => {
       applications: "/api/v1/applications",
       notifications: "/api/v1/notifications",
       auth: "/api/v1/auth",
+
     },
   });
 });

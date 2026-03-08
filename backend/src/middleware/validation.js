@@ -33,7 +33,12 @@ export const userProfileSchema = Joi.object({
   user_type: Joi.string().valid('candidate', 'company').required(),
   full_name: Joi.string().min(3).max(255).required(),
   email: Joi.string().email().required(),
-  phone: Joi.string().allow('', null).optional()
+  phone: Joi.string().allow('', null).optional(),
+  cnpj: Joi.when('user_type', {
+    is: 'company',
+    then: Joi.string().pattern(/^\d{14}$/).required(),
+    otherwise: Joi.string().allow('', null).optional()
+  })
 });
 
 export const resumeSchema = Joi.object({

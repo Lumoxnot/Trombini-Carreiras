@@ -23,7 +23,7 @@ export async function renderHomePage() {
                     <div class="header-content">
                         <h1 class="logo">Trombini Carreiras</h1>
                         <div class="header-auth-actions">
-                            <button class="btn btn-secondary" onclick="handleRegister()">Cadastrar</button>
+                            <button class="btn btn-secondary" onclick="handleRegister()">Criar Conta</button> 
                             <button class="btn btn-primary" onclick="handleLogin()">Entrar</button>
                         </div>
                     </div>

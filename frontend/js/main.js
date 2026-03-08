@@ -11,6 +11,7 @@ import { renderJobsList } from './pages/jobs-list.js';
 import { renderJobForm } from './pages/job-form.js';
 import { renderResumesList } from './pages/resumes-list.js';
 import { renderApplications } from './pages/applications.js';
+import { renderPrivacyPolicy } from './pages/privacy-policy.js';
 
 // Registrar rotas
 Router.register('/', renderHomePage);
@@ -25,8 +26,35 @@ Router.register('/jobs-list', renderJobsList);
 Router.register('/job-form', renderJobForm);
 Router.register('/resumes-list', renderResumesList);
 Router.register('/applications', renderApplications);
+Router.register('/privacidade', renderPrivacyPolicy);
+
+function initLGPDBanner() {
+    if (localStorage.getItem('lgpd_consent')) return;
+
+    const banner = document.createElement('div');
+    banner.id = 'cookie-banner';
+    banner.style = "position: fixed; bottom: 20px; left: 20px; right: 20px; background: #fff; border: 1px solid #ddd; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 10000; display: flex; align-items: center; justify-content: space-between; gap: 20px;";
+    
+    banner.innerHTML = `
+        <span style="font-size: 14px; color: #555;">
+            Usamos cookies para melhorar sua experiência. Ao continuar, você aceita nossa 
+            <a href="/privacidade" style="color: #007bff; text-decoration: underline;">Política de Privacidade</a>.
+        </span>
+        <button id="btn-accept-lgpd" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; white-space: nowrap;">
+            Aceitar Cookies
+        </button>
+    `;
+
+    document.body.appendChild(banner);
+
+    document.getElementById('btn-accept-lgpd').addEventListener('click', () => {
+        localStorage.setItem('lgpd_consent', 'true');
+        banner.remove();
+    });
+}
 
 // Inicializar aplicação
 document.addEventListener('DOMContentLoaded', () => {
     Router.init();
+    initLGPDBanner()
 });

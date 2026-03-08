@@ -6,6 +6,8 @@ import applicationRoutes from "./applicationRoutes.js";
 import notificationRoutes from "./notificationRoutes.js";
 import authRoutes from "./auth.routes.js";
 import entityRoutes from "./entityRoutes.js";
+import cnpjRoutes from "./cnpjRoutes.js";
+
 
 const router = express.Router();
 
@@ -25,5 +27,6 @@ router.use("/resumes", resumeRoutes);
 router.use("/jobs", jobRoutes);
 router.use("/applications", applicationRoutes);
 router.use("/notifications", notificationRoutes);
+router.use("/cnpj", cnpjRoutes);
 
 export default router;
