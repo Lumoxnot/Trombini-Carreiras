@@ -88,7 +88,7 @@ export async function renderResumesList() {
                             <div class="resume-card" data-name="${resume.full_name.toLowerCase()}" data-skills="${resume.skills?.toLowerCase() || ''}" data-experience="${resume.experience?.toLowerCase() || ''}">
                                 <div class="resume-header">
                                     <h3>${resume.full_name}</h3>
-                                    <span class="resume-age">${resume.age} anos</span>
+                                    <span class="resume-age">Nascimento:<b> ${resume?.age ? new Date(resume.age).toLocaleDateString("pt-BR") : ''}</span>
                                 </div>
                                 <p class="resume-education">${resume.education}</p>
                                 <div class="resume-skills">
@@ -163,7 +163,9 @@ export async function renderResumesList() {
 
         modalContent.innerHTML = `
             <h2>${resume.full_name}</h2>
-            <p class="resume-age">${resume.age} anos</p>
+            <p class="resume-age">Data de nascimento:<b> ${resume?.age 
+  ? new Date(resume.age).toLocaleDateString("pt-BR") 
+  : ''}</b></p>
 
             <div class="resume-details">
                 <h3>Resumo/Objetivo</h3>

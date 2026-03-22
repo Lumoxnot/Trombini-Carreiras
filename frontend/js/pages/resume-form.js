@@ -77,9 +77,9 @@ export async function renderResumeForm() {
                             </div>
                             
                             <div class="form-group">
-                                <label for="age">Idade *</label>
-                                <input type="number" id="age" name="age" required min="16" max="100"
-                                    value="${existingResume?.age || ''}">
+                                <label for="age">Data de Nascimento *</label>
+                                <input type="date" id="age" name="age" required
+                                value="${existingResume?.age || ''}">
                             </div>
 
                             <div class="form-group">
@@ -137,7 +137,21 @@ export async function renderResumeForm() {
             </div>
         </div>
     `;
-    
+    const input = document.getElementById("skills");
+
+input.addEventListener("keydown", (e) => {
+  if (e.key === " ") {
+    e.preventDefault(); // impede o espaço
+
+    let value = input.value;
+
+    // adiciona vírgula só se não tiver já no final
+    if (!value.endsWith(", ")) {
+      input.value += ", ";
+    }
+  }
+});
+
     const form = document.getElementById('resumeForm');
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -145,7 +159,7 @@ export async function renderResumeForm() {
         const formData = new FormData(form);
         const resumeData = {
             full_name: formData.get('full_name'),
-            age: parseInt(formData.get('age')),
+            age: formData.get('age'),
             objective: formData.get('objective'),
             education: formData.get('education'),
             experience: formData.get('experience'),

@@ -44,13 +44,13 @@ export class PDFGenerator {
             doc.text(`Telefone: ${phone}`, margin, 40);
 
             doc.setFillColor(59, 130, 246);
-            doc.roundedRect(pageWidth - 52, 12, 38, 18, 3, 3, 'F');
+            doc.roundedRect(pageWidth - 50, 12, 38, 18, 3, 3, 'F');
             doc.setTextColor(255, 255, 255);
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(9);
-            doc.text('IDADE', pageWidth - 45, 20);
+            doc.text('Data de Nascimento', pageWidth - 45, 20);
             doc.setFontSize(14);
-            doc.text(age ? `${age} anos` : '--', pageWidth - 45, 26.5);
+            doc.text(age ? `${age? new Date(age).toLocaleDateString('pt-BR'): ''} ` : '--', pageWidth - 45, 26.5);
         };
 
         const ensureSpace = (heightNeeded) => {
@@ -141,7 +141,7 @@ export class PDFGenerator {
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(8.5);
             doc.setTextColor(...mutedColor);
-            doc.text(`Gerado em ${new Date().toLocaleDateString('pt-BR')}`, margin, pageHeight - 9);
+            doc.text(`Gerado em ${new Date().toLocaleDateString('pt-BR')}\nTrombini Carreiras ©2026` , margin, pageHeight - 9);
             doc.text(`Pagina ${i} de ${pageCount}`, pageWidth - margin - 23, pageHeight - 9);
         }
 
