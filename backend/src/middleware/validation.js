@@ -43,7 +43,7 @@ export const userProfileSchema = Joi.object({
 
 export const resumeSchema = Joi.object({
   full_name: Joi.string().min(3).max(255).required(),
-  age: Joi.date.required(),
+  age: Joi.date().required(),
   objective: Joi.string().min(10).max(1200).required(),
   education: Joi.string().min(10).required(),
   experience: Joi.string().min(10).required(),
