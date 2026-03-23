@@ -131,6 +131,19 @@ export async function renderJobsList() {
             <h2>${job.title}</h2>
             <p class="job-location">📍 ${job.location || 'Não especificado'}</p>
             <div class="job-details">
+
+                <h3>Área</h3>
+                <p>${job.area}</p>
+
+                <h3>Tipo de contrato</h3>
+                <p>${job.contract}</p>
+
+                <h3>Salário</h3>
+                <p>${job.money}</p>
+                
+                <h3>Benefícios</h3>
+                <p>${job.benific}</p>
+
                 <h3>Descrição</h3>
                 <p>${job.description}</p>
                 
@@ -142,8 +155,10 @@ export async function renderJobsList() {
                 
                 <h3>Contato</h3>
                 <p>${job.contact_info || 'Não especificado'}</p>
+
             </div>
-            ${userResume ? `<button class="btn btn-primary btn-block" onclick="applyToJob(${job.id})">Candidatar-se a esta Vaga</button>` : ''}
+            </br>
+            ${userResume ?     `<button class="btn btn-primary btn-block" onclick="applyToJob(${job.id})">Candidatar-se a esta Vaga</button>` : ''}
         `;
         
         modal.style.display = 'flex';

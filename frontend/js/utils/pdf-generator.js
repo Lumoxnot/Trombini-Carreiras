@@ -16,11 +16,14 @@ export class PDFGenerator {
         const safe = (value) => String(value || '').trim();
         const fullName = safe(resume?.full_name) || 'Candidato';
         const age = safe(resume?.age);
-        const email = safe(resume?.contact_email) || 'Nao informado';
-        const phone = safe(resume?.contact_phone) || 'Nao informado';
+        const email = safe(resume?.contact_email) || 'Não informado.';
+        const phone = safe(resume?.contact_phone) || 'Não informado.';
         const objective = safe(resume?.objective || resume?.summary);
-        const education = safe(resume?.education) || 'Nao informado';
-        const experience = safe(resume?.experience) || 'Nao informado';
+        const resumo = safe(resume.resumo || 'Não informado.')
+        const education = safe(resume?.education) || 'Não informado.';
+        const curse = safe(resume.curse) || 'Ainda não possui cursos cadastrados.'
+        const experience = safe(resume?.experience) || 'Não informado.';
+        const language = safe(resume.language) || 'Apenas português'
         const skills = safe(resume?.skills)
             .split(',')
             .map((item) => item.trim())
@@ -121,17 +124,29 @@ export class PDFGenerator {
             ? 'Nao informado'
             : `${experience.slice(0, 260)}${experience.length > 260 ? '...' : ''}`;
 
-        drawSectionTitle('Resumo');
+        drawSectionTitle('Objetivo profissional');
         drawParagraph(objective || generatedObjective);
+
+        drawSectionTitle('Resumo profissional');
+        drawParagraph(resumo);
 
         drawSectionTitle('Formacao Academica');
         drawParagraph(education);
+
+        drawSectionTitle('Cursos');
+        drawParagraph(curse);
 
         drawSectionTitle('Experiencia Profissional');
         drawParagraph(experience);
 
         drawSectionTitle('Habilidades');
         drawSkills();
+
+        drawSectionTitle('Idioma');
+        drawParagraph(language);
+
+
+
 
         const pageCount = doc.internal.getNumberOfPages();
         for (let i = 1; i <= pageCount; i++) {

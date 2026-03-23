@@ -102,43 +102,76 @@ export async function renderJobForm() {
                             <div class="form-group">
                                 <label for="title">Título da Vaga *</label>
                                 <input type="text" id="title" name="title" required
-                                    placeholder="Ex: Desenvolvedor Full Stack"
+                                    placeholder="Ex: Jovem Aprendiz Administrativo"
                                     value="${existingJob?.title || ''}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="area">Área *</label>
+                                <input type="text" id="area" name="area" required
+                                    placeholder="Ex: Administrativo, Atendimento, Vendas, Logística, Tecnologia"
+                                    value="${existingJob?.area || ''}">
+                            </div>
+
+                            
+                            
+                            <div class="form-group">
+                                <label for="contract">Tipo de contrato *</label>
+                                <input type="text" id="contract" name="contract" required
+                                    placeholder="Ex: Jovem Aprendiz, Estágio"
+                                    value="${existingJob?.contract || ''}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location">Localização *</label>
+                                <input type="text" id="location" name="location" required
+                                    placeholder="Ex: Caraguatatuba - SP ou Remoto"
+                                    value="${existingJob?.location || ''}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="money">Salário *</label>
+                                <input type="text" id="money" name="money" 
+                                    placeholder="Ex: R$ 800 ou A combinar"
+                                    value="${existingJob?.money || ''}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="benifc">Benefícios *</label>
+                                <input type="text" id="benific" name="benific" 
+                                    placeholder="Ex: Vale transporte"
+                                    value="${existingJob?.benific || ''}">
                             </div>
                             
                             <div class="form-group">
                                 <label for="description">Descrição da Vaga *</label>
-                                <textarea id="description" name="description" rows="5" required
-                                    placeholder="Descreva as responsabilidades e o que a empresa oferece...">${existingJob?.description || ''}</textarea>
+                                <textarea style="resize: none;" id="description" name="description" rows="5" required
+                                    placeholder="Descreva as responsabilidades e o que a empresa oferece.      
+                                    
+Ex: Auxiliar nas rotinas administrativas da empresa, organização de documentos e atendimento interno.">${existingJob?.description || ''}</textarea>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="requirements">Requisitos *</label>
-                                <textarea id="requirements" name="requirements" rows="4" required
-                                    placeholder="Liste os requisitos necessários para a vaga...">${existingJob?.requirements || ''}</textarea>
-                            </div>
+                                <textarea style="resize: none;" id="requirements" name="requirements" rows="4" required
+                                    placeholder="Liste os requisitos necessários para a vaga.
+Ex: Ensino médio em andamento, boa comunicação e vontade de aprender.">${existingJob?.requirements || ''}</textarea>
                             
+                                    </div>
                             <div class="form-group">
                                 <label for="skills_required">Habilidades Necessárias *</label>
                                 <input type="text" id="skills_required" name="skills_required" required
-                                    placeholder="Ex: JavaScript, React, Node.js (separadas por vírgula)"
+                                    placeholder="Ex: Comunicação, Organização (separadas por vírgula)"
                                     value="${existingJob?.skills_required || ''}">
                             </div>
-                            
-                            <div class="form-group">
-                                <label for="location">Localização *</label>
-                                <input type="text" id="location" name="location" required
-                                    placeholder="Ex: São Paulo - SP / Remoto"
-                                    value="${existingJob?.location || ''}">
-                            </div>
-                            
+
                             <div class="form-group">
                                 <label for="contact_info">Informações de Contato *</label>
                                 <input type="text" id="contact_info" name="contact_info" required
                                     placeholder="E-mail ou telefone para contato"
                                     value="${existingJob?.contact_info || APP_STATE.userProfile?.email || ''}">
                             </div>
-                            
+
                             <div class="form-group checkbox-group">
                                 <label>
                                     <input type="checkbox" id="is_active" name="is_active"
@@ -165,10 +198,14 @@ export async function renderJobForm() {
         const formData = new FormData(form);
         const jobData = {
             title: formData.get('title'),
+            area: formData.get('area'),
+            contract: formData.get('contract'),
+            location: formData.get('location'),
+            money: formData.get('money'),
+            benific: formData.get('benific'),
             description: formData.get('description'),
             requirements: formData.get('requirements'),
             skills_required: formData.get('skills_required'),
-            location: formData.get('location'),
             contact_info: formData.get('contact_info'),
             is_active: formData.get('is_active') === 'on',
             updated_at: new Date().toISOString().slice(0, 19).replace('T', ' ')

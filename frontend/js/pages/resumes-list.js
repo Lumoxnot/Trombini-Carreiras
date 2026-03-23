@@ -168,10 +168,21 @@ export async function renderResumesList() {
   : ''}</b></p>
 
             <div class="resume-details">
-                <h3>Resumo/Objetivo</h3>
-                <p>${resume.objective || resume.summary || 'Nao informado'}</p>
+                <h3>Contato</h3>
+                <p>${resume.contact_email}</p>
+                <p>${resume.contact_phone}</p>
+
+                <h3>Objetivo profissional</h3>
+                <p>${resume.objective || resume.summary || 'Não informado.'}</p>
+                
+                <h3>Resumo profissional</h3>
+                <p>${resume.resumo || resume.summary|| 'Nâo informado.'} </p>
+
                 <h3>Formação Acadêmica</h3>
                 <p>${resume.education}</p>
+
+                <h3>Cursos</h3>
+                <p>${resume.curse || 'Ainda não possui cursos cadastrados.'}</p>
 
                 <h3>Experiência Profissional</h3>
                 <p>${resume.experience}</p>
@@ -179,9 +190,10 @@ export async function renderResumesList() {
                 <h3>Habilidades</h3>
                 <p>${resume.skills}</p>
 
-                <h3>Contato</h3>
-                <p>${resume.contact_email}</p>
-                <p>${resume.contact_phone}</p>
+                <h3>Idiomas</h3>
+                <p>${resume.language ||  'Não possui outros idiomas.'}</p>
+
+                
             </div>
 
             <div class="modal-actions">

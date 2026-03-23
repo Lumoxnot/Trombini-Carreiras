@@ -77,36 +77,6 @@ export async function renderResumeForm() {
                             </div>
                             
                             <div class="form-group">
-                                <label for="age">Data de Nascimento *</label>
-                                <input type="date" id="age" name="age" required
-                                value="${existingResume?.age || ''}">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="objective">Resumo/Objetivo *</label>
-                                <textarea id="objective" name="objective" rows="3" required
-                                    placeholder="Ex: Profissional com foco em desenvolvimento web, buscando atuar em projetos escalaveis e de alto impacto.">${existingResume?.objective || existingResume?.summary || ''}</textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="education">Formação Acadêmica *</label>
-                                <textarea id="education" name="education" rows="3" required 
-                                    placeholder="Ex: Bacharelado em Administração - Universidade XYZ (2018-2022)">${existingResume?.education || ''}</textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="experience">Experiência Profissional *</label>
-                                <textarea id="experience" name="experience" rows="5" required 
-                                    placeholder="Descreva suas experiências profissionais anteriores...">${existingResume?.experience || ''}</textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="skills">Habilidades *</label>
-                                <textarea id="skills" name="skills" rows="3" required 
-                                    placeholder="Ex: JavaScript, React, Comunicação, Trabalho em equipe">${existingResume?.skills || ''}</textarea>
-                            </div>
-                            
-                            <div class="form-group">
                                 <label for="contact_email">E-mail de Contato *</label>
                                 <input type="email" id="contact_email" name="contact_email" required
                                     value="${existingResume?.contact_email || APP_STATE.userProfile?.email || ''}">
@@ -119,6 +89,56 @@ export async function renderResumeForm() {
                                     value="${existingResume?.contact_phone || APP_STATE.userProfile?.phone || ''}">
                             </div>
                             
+                            <div class="form-group">
+                                <label for="age">Data de Nascimento *</label>
+                                <input type="date" id="age" name="age" required
+                                value="${existingResume?.age || ''}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="objective">Objetivo profissional *</label>
+                                <textarea style="resize: none;" id="objective" name="objective" rows="3" required
+                                    placeholder="Ex: Busco uma vaga na área de atendimento ao cliente, com foco em qualidade e satisfação do público.">${existingResume?.objective || existingResume?.summary || ''}</textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="resumo">Resumo profissional *</label>
+                                <textarea style="resize: none;" id="resumo" name="resumo" rows="3" required
+                                    placeholder="Ex: Profissional dedicado, com facilidade de aprendizado e bom relacionamento em equipe.">${existingResume?.resumo || existingResume?.summary || ''}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="education">Formação Acadêmica *</label>
+                                <textarea style="resize: none;" id="education" name="education" rows="3" required 
+                                    placeholder="Ex: Ensino Médio em andamento — Escola Exemplo
+                                    Previsão de conclusão: 2026">${existingResume?.education || ''}</textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="curse">Cursos *</label>
+                                <textarea style="resize: none;" id="curse" name="curse" rows="3"  
+                                    placeholder="Curso de Vendas — Escola Profissionalizante Exemplo
+2022">${existingResume?.curse || ''}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="experience">Experiência Profissional *</label>
+                                <textarea style="resize: none;" id="experience" name="experience" rows="6" required 
+                                    placeholder="Descreva suas experiências profissionais anteriores...">${existingResume?.experience || ''}</textarea>
+                            </div>
+                            
+                            
+                            <div class="form-group">
+                                <label for="skills">Habilidades *</label>
+                                <textarea style="resize: none;" id="skills" name="skills" rows="3" required 
+                                    placeholder="Ex: JavaScript, React, Comunicação, Trabalho em equipe">${existingResume?.skills || ''}</textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="language">Idiomas *</label>
+                                <textarea style="resize: none;" id="language" name="language" rows="3"  
+                                    placeholder="Ex: Inglês — básico/intermediário/avançado">${existingResume?.language || ''}</textarea>
+                            </div>
+
                             <div class="form-group checkbox-group">
                                 <label>
                                     <input type="checkbox" id="is_published" name="is_published" 
@@ -166,6 +186,9 @@ input.addEventListener("keydown", (e) => {
             skills: formData.get('skills'),
             contact_email: formData.get('contact_email'),
             contact_phone: formData.get('contact_phone'),
+            curse: formData.get('curse'),
+            language: formData.get('language'),
+            resumo: formData.get('resumo'),
             is_published: formData.get('is_published') === 'on'
         };
         
