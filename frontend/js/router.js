@@ -1,6 +1,6 @@
 import { APP_STATE } from './config.js';
 import { AuthService } from './auth.js';
-import Toast from "../toast.js";
+
 export const Router = {
     routes: {},
     currentRoute: null,

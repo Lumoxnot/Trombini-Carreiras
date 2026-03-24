@@ -1,5 +1,5 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@metagptx/web-sdk@latest/+esm';
-import Toast from "../toast.js";
+
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'https://trombini-carreiras.onrender.com').replace(/\/+$/, '');
 
 // Recria o client para que o SDK releia o token atual do localStorage.
