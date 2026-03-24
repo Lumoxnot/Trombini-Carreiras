@@ -1,71 +1,131 @@
-// Toast moderno, simples e compatível com Vite
+// Toast PRO (compatível com Vite + Vercel)
 
-let container = null;
+const DEFAULTS = {
+  duration: 4000,
+  position: "top-right",
+  animationDuration: 400,
+  showProgress: true,
+};
 
-function createContainer() {
-  if (container) return container;
+const ICONS = {
+  success: "✔",
+  error: "✖",
+  warning: "⚠",
+  info: "ℹ",
+};
 
-  container = document.createElement("div");
-  container.style.position = "fixed";
-  container.style.top = "20px";
-  container.style.right = "20px";
-  container.style.zIndex = "9999";
-  container.style.display = "flex";
-  container.style.flexDirection = "column";
-  container.style.gap = "10px";
+const THEMES = {
+  success: {
+    bg: "#f0fdf4",
+    border: "#22c55e",
+    text: "#166534",
+    progress: "#22c55e",
+  },
+  error: {
+    bg: "#fef2f2",
+    border: "#ef4444",
+    text: "#991b1b",
+    progress: "#ef4444",
+  },
+  warning: {
+    bg: "#fefce8",
+    border: "#eab308",
+    text: "#854d0e",
+    progress: "#eab308",
+  },
+  info: {
+    bg: "#eff6ff",
+    border: "#3b82f6",
+    text: "#1e40af",
+    progress: "#3b82f6",
+  },
+};
 
-  document.body.appendChild(container);
-  return container;
+let containers = {};
+let stylesInjected = false;
+
+function injectStyles() {
+  if (stylesInjected) return;
+  stylesInjected = true;
+
+  const style = document.createElement("style");
+  style.textContent = `
+.toast-container{position:fixed;z-index:9999;display:flex;flex-direction:column;gap:10px}
+.toast-container.top-right{top:20px;right:20px}
+.toast-container.top-left{top:20px;left:20px}
+.toast-notification{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;border:1px solid;font-size:14px;opacity:0;transform:translateY(-10px);transition:.3s}
+.toast-visible{opacity:1;transform:translateY(0)}
+.toast-progress{position:absolute;bottom:0;left:0;height:3px;width:100%;transition:width linear}
+.toast-close{margin-left:auto;cursor:pointer;opacity:.6}
+.toast-close:hover{opacity:1}
+  `;
+  document.head.appendChild(style);
 }
 
-function createToast(message, type = "info") {
-  const colors = {
-    success: "#22c55e",
-    error: "#ef4444",
-    warning: "#eab308",
-    info: "#3b82f6",
-  };
+function getContainer(position) {
+  if (containers[position]) return containers[position];
+  const el = document.createElement("div");
+  el.className = `toast-container ${position}`;
+  document.body.appendChild(el);
+  containers[position] = el;
+  return el;
+}
+
+function showToast(type, message, options = {}) {
+  injectStyles();
+
+  const config = { ...DEFAULTS, ...options };
+  const theme = THEMES[type];
+  const container = getContainer(config.position);
 
   const toast = document.createElement("div");
+  toast.className = "toast-notification";
+  toast.style.background = theme.bg;
+  toast.style.borderColor = theme.border;
+  toast.style.color = theme.text;
+  toast.style.position = "relative";
 
-  toast.textContent = message;
-  toast.style.padding = "12px 16px";
-  toast.style.borderRadius = "8px";
-  toast.style.color = "#fff";
-  toast.style.fontSize = "14px";
-  toast.style.fontWeight = "500";
-  toast.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)";
-  toast.style.background = colors[type] || colors.info;
-  toast.style.opacity = "0";
-  toast.style.transform = "translateY(-10px)";
-  toast.style.transition = "all 0.3s ease";
+  toast.innerHTML = `
+    <span>${ICONS[type]}</span>
+    <span>${message}</span>
+    <span class="toast-close">✖</span>
+    ${
+      config.showProgress
+        ? `<div class="toast-progress" style="background:${theme.progress};transition-duration:${config.duration}ms"></div>`
+        : ""
+    }
+  `;
+
+  container.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.classList.add("toast-visible");
+    const pb = toast.querySelector(".toast-progress");
+    if (pb) pb.style.width = "0%";
+  });
+
+  const remove = () => {
+    toast.classList.remove("toast-visible");
+    setTimeout(() => toast.remove(), 300);
+  };
+
+  toast.querySelector(".toast-close").onclick = remove;
+
+  let timeout = setTimeout(remove, config.duration);
+
+  toast.onmouseenter = () => clearTimeout(timeout);
+  toast.onmouseleave = () => {
+    timeout = setTimeout(remove, 1000);
+  };
 
   return toast;
 }
 
-function show(message, type = "info", duration = 3000) {
-  const parent = createContainer();
-  const toast = createToast(message, type);
-
-  parent.appendChild(toast);
-
-  requestAnimationFrame(() => {
-    toast.style.opacity = "1";
-    toast.style.transform = "translateY(0)";
-  });
-
-  setTimeout(() => {
-    toast.style.opacity = "0";
-    toast.style.transform = "translateY(-10px)";
-    setTimeout(() => toast.remove(), 300);
-  }, duration);
-}
-
 const Toast = {
-  success: (msg, duration) => show(msg, "success", duration),
-  error: (msg, duration) => show(msg, "error", duration),
-  warning: (msg, duration) => show(msg, "warning", duration),
-  info: (msg, duration) => show(msg, "info", duration),
+  success: (msg, opt) => showToast("success", msg, opt),
+  error: (msg, opt) => showToast("error", msg, opt),
+  warning: (msg, opt) => showToast("warning", msg, opt),
+  info: (msg, opt) => showToast("info", msg, opt),
 };
 
 export default Toast;
