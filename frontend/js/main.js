@@ -12,6 +12,8 @@ import { renderJobForm } from './pages/job-form.js';
 import { renderResumesList } from './pages/resumes-list.js';
 import { renderApplications } from './pages/applications.js';
 import { renderPrivacyPolicy } from './pages/privacy-policy.js';
+import Toast from "./toast.js";
+
 
 // Registrar rotas
 Router.register('/', renderHomePage);
@@ -27,7 +29,7 @@ Router.register('/job-form', renderJobForm);
 Router.register('/resumes-list', renderResumesList);
 Router.register('/applications', renderApplications);
 Router.register('/privacidade', renderPrivacyPolicy);
-
+window.Toast = Toast;
 function initLGPDBanner() {
     if (localStorage.getItem('lgpd_consent')) return;
 
