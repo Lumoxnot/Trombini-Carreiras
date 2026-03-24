@@ -235,9 +235,9 @@ export class AuthService {
     APP_STATE.userProfile = data.data || null;
     APP_STATE.isAuthenticated = true;
     if (APP_STATE.userProfile?.user_type === "candidate") {
-      alert("Perfil criado: Candidato");
+      Toast.success("Perfil criado: Candidato");
     } else if (APP_STATE.userProfile?.user_type === "company") {
-      alert("Perfil criado: Empresa");
+      Toast.success("Perfil criado: Empresa");
     }
     return data.data;
   }

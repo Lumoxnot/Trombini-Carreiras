@@ -184,7 +184,7 @@ export async function renderApplications() {
     window.downloadResumePDF = (resumeId) => {
         const resume = resumes[resumeId];
         if (!resume) {
-            alert('Currículo não encontrado.');
+            Toast.error("Currículo não encontrado.");
             return;
         }
         
@@ -192,7 +192,7 @@ export async function renderApplications() {
             PDFGenerator.generateResumePDF(resume);
         } catch (error) {
             console.error('Error generating PDF:', error);
-            alert('Erro ao gerar PDF. Por favor, tente novamente.');
+             Toast.error("Erro ao gerar PDF. Por favor, tente novamente.");
         }
     };
     
@@ -202,19 +202,18 @@ export async function renderApplications() {
                 method: 'PATCH',
                 body: { status: newStatus }
             });
-
-            alert(`Candidatura ${newStatus === 'approved' ? 'aprovada' : 'rejeitada'} com sucesso!`);
+            Toast.success(`Candidatura ${newStatus === 'approved' ? 'aprovada' : 'rejeitada'} com sucesso!`);
             location.reload();
         } catch (error) {
             console.error('Error updating application:', error);
-            alert('Erro ao atualizar candidatura. Por favor, tente novamente.');
+            Toast.error("Erro ao atualizar candidatura. Por favor, tente novamente.");
         }
     };
 
     window.viewResumeDetails = (resumeId) => {
         const resume = resumes[resumeId];
         if (!resume) {
-            alert('Curriculo nao encontrado.');
+             Toast.error("Curriculo não encontrado.");
             return;
         }
         

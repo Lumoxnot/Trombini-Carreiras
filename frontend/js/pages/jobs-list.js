@@ -170,7 +170,7 @@ export async function renderJobsList() {
     
     window.applyToJob = async (jobId) => {
         if (!userResume) {
-            alert('Você precisa criar seu currículo antes de se candidatar.');
+            Toast.warning("Você precisa criar seu currículo antes de se candidatar.");
             return;
         }
         
@@ -182,7 +182,7 @@ export async function renderJobsList() {
             });
             
             if (getItems(existingApp).length > 0) {
-                alert('Você já se candidatou a esta vaga!');
+                Toast.warning("Você já se candidatou a esta vaga!");
                 return;
             }
             
@@ -196,12 +196,11 @@ export async function renderJobsList() {
                     updated_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
                 }
             });
-            
-            alert('Candidatura enviada com sucesso!');
+            Toast.success("Candidatura enviada com sucesso!");
             window.closeModal();
         } catch (error) {
             console.error('Error applying to job:', error);
-            alert('Erro ao enviar candidatura. Por favor, tente novamente.');
+            Toast.error("Erro ao enviar candidatura. Por favor, tente novamente.");
         }
     };
 }

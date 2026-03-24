@@ -142,7 +142,7 @@ export async function renderResumesList() {
     window.downloadResumePDF = (resumeId) => {
         const resume = resumes.find((r) => String(r.id) === String(resumeId));
         if (!resume) {
-            alert('Currículo não encontrado.');
+            Toast.error("Currículo não encontrado.");
             return;
         }
 
@@ -150,7 +150,7 @@ export async function renderResumesList() {
             PDFGenerator.generateResumePDF(resume);
         } catch (error) {
             console.error('Error generating PDF:', error);
-            alert('Erro ao gerar PDF. Por favor, tente novamente.');
+            Toast.error("Erro ao gerar PDF. Por favor, tente novamente.");
         }
     };
 

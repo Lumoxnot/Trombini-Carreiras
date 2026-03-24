@@ -47,7 +47,8 @@ export async function renderLoginPage() {
     try {
       await AuthService.login(email, password);
     } catch (error) {
-      alert(error.message || "Falha no login. Tente novamente.");
+      Toast.error(error.message || "Falha no login. Tente novamente.");
+
       submitButton.disabled = false;
       submitButton.textContent = "Entrar";
     }

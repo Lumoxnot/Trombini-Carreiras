@@ -223,12 +223,11 @@ Ex: Ensino médio em andamento, boa comunicação e vontade de aprender.">${exis
                 jobData.created_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
                 await createEntity('job_postings', jobData);
             }
-            
-            alert('Vaga salva com sucesso!');
+            Toast.success("Vaga salva com sucesso!");
             Router.navigateTo('/company-dashboard');
         } catch (error) {
             console.error('Error saving job:', error);
-            alert('Erro ao salvar vaga. Por favor, tente novamente.');
+            Toast.error("Erro ao salvar vaga. Por favor, tente novamente.");
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.disabled = false;
             submitBtn.textContent = existingJob ? 'Atualizar Vaga' : 'Publicar Vaga';

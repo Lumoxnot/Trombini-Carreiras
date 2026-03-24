@@ -222,12 +222,11 @@ input.addEventListener("keydown", (e) => {
                     });
                 }
             }
-            
-            alert('Currículo salvo com sucesso!');
+            Toast.success("Currículo salvo com sucesso!");
             Router.navigateTo('/candidate-dashboard');
         } catch (error) {
             console.error('Error saving resume:', error);
-            alert(`Erro ao salvar currículo. ${getErrorMessage(error)}`);
+            Toast.error(`Erro ao salvar currículo. ${getErrorMessage(error)}`);
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.disabled = false;
             submitBtn.textContent = 'Salvar Currículo';

@@ -196,12 +196,12 @@ export async function renderSetupProfile() {
         if (userData.user_type === 'company') {
             const currentCnpjDigits = onlyDigits(cnpjInput.value);
             if (currentCnpjDigits.length !== 14) {
-                alert('Para empresa, informe um CNPJ valido.');
+                Toast.warning("Para empresa, informe um CNPJ valido.");
                 return;
             }
 
             if (!cnpjVerified || verifiedCnpjDigits !== currentCnpjDigits) {
-                alert('Verifique o CNPJ antes de continuar.');
+                Toast.warning("Verifique o CNPJ antes de continuar.");
                 return;
             }
 
@@ -223,7 +223,7 @@ export async function renderSetupProfile() {
                 Router.navigateTo('/company-dashboard');
             }
         } catch (error) {
-            alert('Erro ao criar perfil. Por favor, tente novamente.');
+            Toast.error("Erro ao criar perfil. Por favor, tente novamente.");
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.disabled = false;
             submitBtn.textContent = 'Continuar';

@@ -47,7 +47,7 @@ export async function renderRegisterPage() {
     //Verificação extra de segurança no JS
     const acceptLgpd = document.getElementById("acceptLgpd");
     if (!acceptLgpd.checked) {
-      alert("Você precisa aceitar os termos de privacidade para continuar.");
+      Toast.warning("Você precisa aceitar os termos de privacidade para continuar.");
       return;
     }
 
@@ -66,7 +66,7 @@ export async function renderRegisterPage() {
         submitButton.textContent = "Cadastrar";
       }
     } catch (error) {
-      alert(error.message || "Falha no cadastro. Tente novamente.");
+      Toast.error(error.message || "Falha no cadastro. Tente novamente.");
       if (String(error.message || "").toLowerCase().includes("faca login")) {
         Router.navigateTo("/login");
         return;
