@@ -250,3 +250,5 @@
     global.Toast = Toast;
   }
 })(typeof window !== "undefined" ? window : this);
+
+export default Toast;

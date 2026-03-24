@@ -1,7 +1,7 @@
 import { APP_STATE } from '../config.js';
 import { AuthService } from '../auth.js';
 import { Router } from '../router.js';
-
+import Toast from "../toast.js";
 export async function renderSetupProfile() {
     const app = document.getElementById('app');
     

@@ -1,5 +1,6 @@
 import { APP_STATE } from '../config.js';
 import { Router } from '../router.js';
+import Toast from "../toast.js";
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "https://trombini-carreiras.onrender.com").replace(/\/+$/, "");
 

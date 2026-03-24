@@ -1,5 +1,6 @@
 import { AuthService } from "../auth.js";
 import { Router } from "../router.js";
+import Toast from "../toast.js";
 
 export async function renderLoginPage() {
   const app = document.getElementById("app");
