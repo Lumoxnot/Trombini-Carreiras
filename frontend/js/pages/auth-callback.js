@@ -1,6 +1,5 @@
 import { client } from '../config.js';
 import { Router } from '../router.js';
-import Toast from "../toast.js";
 
 export async function renderAuthCallback() {
     const app = document.getElementById('app');
