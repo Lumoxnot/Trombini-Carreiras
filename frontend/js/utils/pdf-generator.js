@@ -60,80 +60,172 @@ export class PDFGenerator {
         // FUNCOES DE DESENHO
         // ======================================================
 
-        // --- HEADER ---
         const drawHeader = () => {
-            // Fundo escuro do header
-            setFill(colors.headerBg);
-            doc.rect(0, 0, pageWidth, headerH, 'F');
 
-            // Barra de destaque lateral esquerda (accent line)
-            setFill(colors.accentBlue);
-            doc.rect(0, 0, 4, headerH, 'F');
+    // Fundo escuro do header
+    setFill(colors.headerBg);
+    doc.rect(0, 0, pageWidth, headerH, 'F');
 
-            // Nome
-            setColor(colors.white);
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(28); // Nome maior e mais destacado
-            // Corrigido: Permite que o nome quebre linha se for muito longo
-            const maxNameWidth = pageWidth - (44 + 5) - (marginX + 5); // Largura da caixa de data + margem + margem do nome
-            const nameLines = doc.splitTextToSize(fullName.toUpperCase(), maxNameWidth);
-            doc.text(nameLines, marginX + 5, 22);
+    // Barra lateral azul
+    setFill(colors.accentBlue);
+    doc.rect(0, 0, 4, headerH, 'F');
 
-            // Cargo / título profissional
-            setColor(colors.accentBlue);
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(12); // Fonte mais profissional
-            doc.text(jobTitle, marginX + 5, 30);
+    // =========================
+    // NOME
+    // =========================
 
-            // Linha separadora sutil
-            setDraw([60, 80, 120]); // Cor mais discreta
-            doc.line(marginX + 5, 33, pageWidth - marginX, 33);
+    setColor(colors.white);
+    doc.setFont('helvetica', 'bold');
 
-            // Contatos no header
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(9);
-            setColor([200, 215, 240]); // Cor mais clara para contraste
+    let nameFontSize = 28;
 
-            const contacts = [];
-            if (email)    contacts.push(`Email: ${email}`);
-            if (phone)    contacts.push(`Tel: ${phone}`);
-            if (location) contacts.push(`Local: ${location}`);
-            if (linkedin) contacts.push(`LinkedIn: ${linkedin}`);
+    if (fullName.length > 22) {
+        nameFontSize = 24;
+    }
 
-            let cx = marginX + 5;
-            contacts.forEach((c, i) => {
-                const w = doc.getTextWidth(c);
-                if (cx + w > pageWidth - marginX) return;
-                doc.text(c, cx, 44);
-                cx += w + 12;
-                if (i < contacts.length - 1 && cx + 2 < pageWidth - marginX) {
-                    setColor([70, 100, 160]); // Cor do separador
-                    doc.text('|', cx - 6, 44);
-                    setColor([200, 215, 240]);
-                }
-            });
+    if (fullName.length > 30) {
+        nameFontSize = 20;
+    }
 
-            // Data de nascimento (canto direito)
-            if (age) {
-                let dob = age;
-                try {
-                    dob = new Date(age).toLocaleDateString('pt-BR');
-                } catch (_) {}
+    if (fullName.length > 40) {
+        nameFontSize = 16;
+    }
 
-                setFill(colors.primaryBlue); // Cor mais sofisticada
-                doc.roundedRect(pageWidth - 44, 5, 40, 16, 2, 2, 'F');
+    doc.setFontSize(nameFontSize);
 
-                setColor(colors.lightBlue); // Cor mais clara
-                doc.setFontSize(7);
-                doc.setFont('helvetica', 'normal');
-                doc.text('NASCIMENTO', pageWidth - 41, 11);
+    const maxNameWidth = pageWidth - 65;
 
-                setColor(colors.white);
-                doc.setFontSize(9);
-                doc.setFont('helvetica', 'bold');
-                doc.text(dob, pageWidth - 41, 17);
-            }
-        };
+    const nameLines = doc.splitTextToSize(
+        fullName.toUpperCase(),
+        maxNameWidth
+    );
+
+    // SUBIU O NOME
+    doc.text(nameLines, marginX + 5, 18);
+
+    // =========================
+    // CARGO
+    // =========================
+
+    setColor(colors.accentBlue);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+
+    // SUBIU O SUBTÍTULO
+    const jobTitleY =
+        25 + ((nameLines.length - 1) * 6);
+
+    doc.text(
+        jobTitle,
+        marginX + 5,
+        jobTitleY
+    );
+
+    // =========================
+    // LINHA DIVISÓRIA
+    // =========================
+
+    const dividerY = jobTitleY + 3;
+
+    setDraw([60, 80, 120]);
+
+    doc.line(
+        marginX + 5,
+        dividerY,
+        pageWidth - marginX,
+        dividerY
+    );
+
+    // =========================
+    // CONTATOS
+    // =========================
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+
+    setColor([200, 215, 240]);
+
+    const contacts = [];
+
+    if (email) contacts.push(`Email: ${email}`);
+    if (phone) contacts.push(`Tel: ${phone}`);
+    if (location) contacts.push(`Local: ${location}`);
+    if (linkedin) contacts.push(`LinkedIn: ${linkedin}`);
+
+    let cx = marginX + 5;
+
+    contacts.forEach((c, i) => {
+
+        const w = doc.getTextWidth(c);
+
+        if (cx + w > pageWidth - marginX) return;
+
+        doc.text(c, cx, dividerY + 10);
+
+        cx += w + 12;
+
+        if (i < contacts.length - 1) {
+
+            setColor([70, 100, 160]);
+
+            doc.text(
+                '|',
+                cx - 6,
+                dividerY + 10
+            );
+
+            setColor([200, 215, 240]);
+        }
+    });
+
+    // =========================
+    // DATA NASCIMENTO
+    // =========================
+
+    if (age) {
+
+        let dob = age;
+
+        try {
+            dob = new Date(age).toLocaleDateString('pt-BR');
+        } catch (_) {}
+
+        setFill(colors.primaryBlue);
+
+        doc.roundedRect(
+            pageWidth - 44,
+            8,
+            40,
+            16,
+            2,
+            2,
+            'F'
+        );
+
+        setColor(colors.lightBlue);
+
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'normal');
+
+        doc.text(
+            'NASCIMENTO',
+            pageWidth - 41,
+            14
+        );
+
+        setColor(colors.white);
+
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+
+        doc.text(
+            dob,
+            pageWidth - 41,
+            20
+        );
+    }
+};
 
         // --- FUNDOS DAS COLUNAS ---
         const drawColumnBackgrounds = () => {
