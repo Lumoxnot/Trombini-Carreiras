@@ -1,4 +1,5 @@
 import { client, APP_STATE } from '../config.js';
+import { PDFGenerator } from '../utils/pdf-generator.js';
 import { Router } from '../router.js';
 import Toast from "../toast.js";
 function getItems(response) {
@@ -148,6 +149,7 @@ export async function renderResumeForm() {
                             </div>
                             
                             <div class="form-actions">
+                                <button type="button" class="btn btn-success" id="btnDownloadPDF">Baixar PDF</button>
                                 <button type="button" class="btn btn-secondary" onclick="history.back()">Cancelar</button>
                                 <button type="submit" class="btn btn-primary">Salvar Currículo</button>
                             </div>
@@ -159,18 +161,7 @@ export async function renderResumeForm() {
     `;
     const input = document.getElementById("skills");
 
-input.addEventListener("keydown", (e) => {
-  if (e.key === " ") {
-    e.preventDefault(); // impede o espaço
 
-    let value = input.value;
-
-    // adiciona vírgula só se não tiver já no final
-    if (!value.endsWith(", ")) {
-      input.value += ", ";
-    }
-  }
-});
 
     const form = document.getElementById('resumeForm');
     form.addEventListener('submit', async (e) => {
@@ -232,4 +223,33 @@ input.addEventListener("keydown", (e) => {
             submitBtn.textContent = 'Salvar Currículo';
         }
     });
+
+    // ——— BOTÃO BAIXAR PDF ———
+const btnPDF = document.getElementById('btnDownloadPDF');
+
+btnPDF.addEventListener('click', async () => {
+    // Desabilita o botão para evitar cliques duplos
+    btnPDF.disabled = true;
+    btnPDF.textContent = 'Gerando PDF...';
+
+    try {
+        // Busca o currículo mais recente salvo
+        const resumeParaPDF = await fetchLatestResume();
+
+        if (!resumeParaPDF) {
+            Toast.error('Salve seu currículo antes de baixar o PDF.');
+            return;
+        }
+
+        // Gera e baixa o PDF com os dados completos
+        PDFGenerator.generateResumePDF(resumeParaPDF);
+        Toast.success('PDF gerado com sucesso!');
+    } catch (error) {
+        console.error('Erro ao gerar PDF:', error);
+        Toast.error('Erro ao gerar o PDF. Tente novamente.');
+    } finally {
+        btnPDF.disabled = false;
+        btnPDF.textContent = 'Baixar PDF';
+    }
+});
 }
